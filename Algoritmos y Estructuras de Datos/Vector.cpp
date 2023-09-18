@@ -85,42 +85,62 @@ class Vector{
         friend std::ostream& operator<<(std::ostream& os, Vector<T>& b){
             return os << b.to_string();
         }
+        
+        void sec_sort(){
+            int n = capacidad, aux;
+            for (int i = 0; i < n; i++){
+                for (int j = 0; j < n; j++){
+                    if (v[i] < v[j]){
+                        aux = v[i];
+                        v[i] = v[j];
+                        v[j] = aux;
+                        }
+                }
+            }
+        }
+        
+        int sec_search(int n){
+                int x = 0;
+                 while(v[x] != n){
+                    x++;
+                 }return x;
+        }
+        
+        int binary_search(int n){
+            int inf = 0, sup = size, mid;
+                while(inf <= sup){
+                       mid = (inf+sup)/2;
+                       if (v[mid] == n){
+                           break;
+                       }if(v[mid] > n) {
+                           sup = mid;
+                       }if(v[mid] < n){
+                           inf = mid;
+                       }
+                }
+            return mid;
+        }
             
         
 };
 
 int main()
 {
-    
+    //Crear y llenar vector V
     Vector<int> v = Vector<int>();
-    
-    for(int i = 0; i<35; i++){
-        v.add(i);
+    int size = 40;
+    for(int i = 0; i<size; i++){
+        v.add(rand()%size);
     }
     
     
-    /*Vector<string> v = Vector<string>();
-    
-    for(int i = 0; i<25; i++){
-        v.add(""+i);
-    }*/
-    
     v.print();
-    cout<<endl;
+    v.sec_sort();
+    v.print();
+    cout<<"39 está en la posición (sec search): "<<v.sec_search(39)<<endl;
+    cout<<"39 está en la posición (binary search): "<<v.binary_search(39)<<endl;
     cout<<"La capacidad es: "<<v.get_capacidad()<<endl;
     
-    cout<<endl;
-    
-    cout<<v<<"\n";
-    
-    
-    
-    Vector<int> w ;
-    w=  v;
-    
-    w.print();
-    
-    cout<<"El otro vector es: "<<w;
-    return 0;
+  return 0;
 }
 
