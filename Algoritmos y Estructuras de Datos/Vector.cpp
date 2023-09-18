@@ -87,7 +87,7 @@ class Vector{
         }
         
         void sec_sort(){
-            int n = capacidad, aux;
+            int n = size, aux;
             for (int i = 0; i < n; i++){
                 for (int j = 0; j < n; j++){
                     if (v[i] < v[j]){
@@ -97,6 +97,29 @@ class Vector{
                         }
                 }
             }
+        }
+        
+        void bubble_sort(){
+            bool swap = true;
+            int n = size-1, aux;
+            
+            for (int i = 0; i < size; i++){
+                if (swap == false){
+                    break;
+                }
+                swap = false;
+                for (int j = 0; j < n; j++){
+                    if (v[j] > v[j+1]){
+                        aux = v[j];
+                        v[j] = v[j+1];
+                        v[j+1] = aux;
+                        swap = true;
+                        }
+                }
+                n--;
+            }
+            
+            
         }
         
         int sec_search(int n){
@@ -135,7 +158,7 @@ int main()
     
     
     v.print();
-    v.sec_sort();
+    v.bubble_sort();
     v.print();
     cout<<"39 está en la posición (sec search): "<<v.sec_search(39)<<endl;
     cout<<"39 está en la posición (binary search): "<<v.binary_search(39)<<endl;
@@ -143,4 +166,3 @@ int main()
     
   return 0;
 }
-
