@@ -118,8 +118,38 @@ class Vector{
                 }
                 n--;
             }
+        }
+        
+        void max_heap(int n, int i){ // n tamaño, i elem a evaluar
+            int temp, largest = i, der = 2*(i+1), izq = 2*(i+1)-1;
             
+            if(izq < n && v[izq] > v[largest]){
+                largest = izq;
+            }
+            if (der < n && v[der] > v[largest]){
+                largest = der;
+            }
+            if (largest != i){
+                temp = v[largest];
+                v[largest] = v[i];
+                v[i] = temp;
+                max_heap(n, largest);
+            }
+        }
+        
+        void heap_sort(){
+            int n = size, max_father = (n/2)-1, temp;
             
+            for (int i = max_father; i>=0; i--){
+                max_heap(n,i);
+            }
+            
+            for (int i=1; i<n;i++){
+                temp = v[0];
+                v[0] = v[n-i];
+                v[n-i] = temp;
+                max_heap(n-i,0);
+            }
         }
         
         int sec_search(int n){
@@ -158,7 +188,7 @@ int main()
     
     
     v.print();
-    v.bubble_sort();
+    v.heap_sort();
     v.print();
     cout<<"39 está en la posición (sec search): "<<v.sec_search(39)<<endl;
     cout<<"39 está en la posición (binary search): "<<v.binary_search(39)<<endl;
