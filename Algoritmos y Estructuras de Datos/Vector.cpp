@@ -152,6 +152,53 @@ class Vector{
             }
         }
         
+        void merge(int s, int e){
+            int mid = (s+e)/2, len1 = mid-s+1, len2 = e-mid, mainind = s;
+            int *first = new int[len1], *second = new int[len2];
+            
+            for (int i=0; i<len1; i++){
+                first[i] = v[mainind++];
+            }
+            mainind = mid+1;
+            for (int i=0; i<len2; i++){
+                second[i] = v[mainind++];
+            }
+            
+            int index1 = 0, index2 = 0;
+            mainind = s;
+            
+            while(index1 < len1 && index2 < len2){
+                if(first[index1] < second[index2]){
+                    v[mainind++] = first[index1++];
+                }else{
+                    v[mainind++] = second[index2++];
+                }
+            }
+            while (index1 < len1){
+                v[mainind++] = first[index1++];
+            }
+            while (index1 < len1){
+                v[mainind++] = second[index2++];
+            }
+            delete[]first;
+            delete[]second;
+        }
+        
+        
+        void priv_merge_sort(int s, int e){
+            if (s>= e){
+                return;
+            }
+            int mid = (s+e)/2;
+            priv_merge_sort(s,mid);
+            priv_merge_sort(mid+1,e);
+            merge(s,e);
+        }
+        
+        void merge_sort(){
+            priv_merge_sort(0,size);
+        }
+        
         int sec_search(int n){
                 int x = 0;
                  while(v[x] != n){
@@ -188,7 +235,7 @@ int main()
     
     
     v.print();
-    v.heap_sort();
+    v.merge_sort();
     v.print();
     cout<<"39 está en la posición (sec search): "<<v.sec_search(39)<<endl;
     cout<<"39 está en la posición (binary search): "<<v.binary_search(39)<<endl;
