@@ -147,13 +147,14 @@ public:
         }
     }
     void push(T val){
-        
+        insert(val, size);
     }
     T pop(){
         
     }
     T peek(){
-        
+        Nodo<T>* nod_temp = get(size-1);
+        return nod_temp->get_dato();
     }
     void clear(){
         
@@ -171,5 +172,9 @@ int main()
         c.add(rand()%tam);
     }
     c.print();
+    c.push(2);
+    c.print();
+    cout<<c.peek()<<endl;
+    
     return 0;
 }
