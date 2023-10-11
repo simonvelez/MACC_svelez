@@ -137,10 +137,14 @@ public:
     }
     
     int get_size(){
-    
+        return size;
     }
     bool isEmpty(){
-        
+        if(size == 0){
+            return true;
+        }else{
+            return false;
+        }
     }
     void push(T val){
         
@@ -161,9 +165,10 @@ public:
 
 int main()
 {
+    int tam = 20;
     Pila<int> c;
-        for(int i=0; i<10; i++){
-        c.add(i);
+        for(int i=0; i<tam; i++){
+        c.add(rand()%tam);
     }
     c.print();
     return 0;
