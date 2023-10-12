@@ -157,7 +157,10 @@ public:
         return nod_temp->get_dato();
     }
     void clear(){
-        
+        if (size > 0){
+            pop();
+            clear();
+        }
     }
     
 };
