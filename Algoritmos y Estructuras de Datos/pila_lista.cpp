@@ -150,8 +150,25 @@ public:
         insert(val, size);
     }
     T pop(){
-        
+        if (size == 0){
+            cout<<"Error! (pop en lista vacía)"<<endl;
+            return NULL;
+        }
+        if (size ==1){
+            Nodo<T>* popped = get(size-1);
+            ptr = NULL;
+            size--;
+            return popped->get_dato();
+        }
+        else{
+            Nodo<T>* popped = get(size-1);
+            get(size-2)->set_next(NULL);
+            delete get(size-1);
+            size--;
+            return popped->get_dato();
+        }
     }
+    
     T peek(){
         Nodo<T>* nod_temp = get(size-1);
         return nod_temp->get_dato();
@@ -166,7 +183,6 @@ public:
 };
 
 
-
 int main()
 {
     int tam = 20;
@@ -177,7 +193,10 @@ int main()
     c.print();
     c.push(2);
     c.print();
-    cout<<c.peek()<<endl;
+    c.pop();
+    c.print();
+    c.clear();
+    c.print();
     
     return 0;
 }
