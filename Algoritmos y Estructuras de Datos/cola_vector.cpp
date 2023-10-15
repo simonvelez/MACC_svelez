@@ -93,19 +93,59 @@ class Cola{
         }
         
         bool isEmpty(){
-            
+            if (size == 0){
+                return true;
+            }else{
+                return false;
+            }
         }
-        void enqueue(T val){
-            
+
+        void enqueue(T valor){
+            size++;
+            if(size == capacidad){
+                incrementar_capacidad();
+            }
+            T* new_v = new T[size];
+            for(int i =1;i<size;i++){
+                new_v[i]=v[i-1];
+            }
+            T* old_v =v;
+            new_v[0] = valor;
+            v = new_v;
+            delete[] old_v;
         }
+            
         T dequeue(){
-            
+            if (size == 0){
+                cout<<"Error! (dequeue en vector vacío)"<<endl;
+                return NULL;
+            }
+            else{
+                T last = v[size-1];
+                T* new_v = new T[size-1];
+                for(int i =0;i<(size-1);i++){
+                    new_v[i]=v[i];
+                }
+                T* old_v =v;
+                v = new_v;
+                size = --size;
+                delete[] old_v;
+                return last;
+            }
         }
+        
         T peek(){
-            
+            if (size == 0){
+                cout<<"Error! (peek en vector vacío)"<<endl;
+                return NULL;
+            }            
+            return v[size-1];
         }
         void clear(){
-            
+            if (size > 0){
+                dequeue();
+                clear();
+            }
         }
 };
 
@@ -118,7 +158,13 @@ int main()
         c.add(rand()%tam);
     }
     
-    
+    c.print();
+    c.enqueue(1);
+    c.enqueue(2);
+    c.print();
+    c.dequeue();
+    c.print();
+    c.clear();
     c.print();
     
     return 0;
