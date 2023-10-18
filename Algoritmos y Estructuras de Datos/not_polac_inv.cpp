@@ -187,8 +187,11 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
     int tam =  polac.get_size(); //Expresiones totales
     int val = tam; //Expresiones válidas
     for (int i = 0; i < polac.get_size(); i++){
+        
         switch(polac.peek()[2]){
             case '+':
+                res.push(polac.peek()[0] + polac.peek()[1];
+                polac.pop();
                 break;
             case '-':
                 break;
@@ -198,7 +201,7 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
                 break;
             default:
                 val--;
-                polac.pop()
+                polac.pop();
         }
     }
     cout<<"La pila tiene "<<val<<" expresiones válidas de "<<tam<<", un "<<(val/tam)*100<<"%.";
@@ -223,8 +226,10 @@ int main()
         cout<<"Inserte un número válido de expresiones. :("<<endl<<endl;
         main();
     }
-    
-    polacinv(polac).print();
+    cout<<"Expresiones agregadas:"<<endl;
+    polac.print();
+    cout<<"Resultados al evaluar las expresiones: "<<endl;
+    polacinv(polac).print(); 
     
     return 0;
 }
