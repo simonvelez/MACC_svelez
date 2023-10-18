@@ -182,6 +182,28 @@ public:
     
 };
 
+Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una pila en polaco inverso
+    Pila<int> res;
+    int tam =  polac.get_size(); //Expresiones totales
+    int val = tam; //Expresiones válidas
+    for (int i = 0; i < polac.get_size(); i++){
+        switch(polac.peek()[2]){
+            case '+':
+                break;
+            case '-':
+                break;
+            case '*':
+                break;
+            case '/':
+                break;
+            default:
+                val--;
+                polac.pop()
+        }
+    }
+    cout<<"La pila tiene "<<val<<" expresiones válidas de "<<tam<<", un "<<(val/tam)*100<<"%.";
+    return res;
+}
 
 int main()
 {
@@ -201,6 +223,8 @@ int main()
         cout<<"Inserte un número válido de expresiones. :("<<endl<<endl;
         main();
     }
+    
+    polacinv(polac).print();
     
     return 0;
 }
