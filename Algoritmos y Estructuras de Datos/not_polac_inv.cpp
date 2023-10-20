@@ -186,8 +186,8 @@ public:
 Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una pila en polaco inverso
     Pila<int> res; 
     Pila<int> temp; //Pila para los cálculos de cada expresión
-    int tam =  polac.get_size();
-    int vals = tam; //Expresiones válidas
+    float tam =  polac.get_size();
+    float vals = tam; //Expresiones válidas
     bool val = true;
     string expr = polac.peek();
     
@@ -195,7 +195,6 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
         val = true;
         expr = polac.peek();
         temp.clear();
-        
         for (int j = 0; j< expr.size(); j++){ //Iterar sobre cada elemento de la expresión
             if (val = false){
                 vals--;
@@ -210,13 +209,13 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
                 if (temp.get_size() > 1){
                     switch(expr[j]){
                         case '+':
-                            a = temp.pop();
                             b = temp.pop();
+                            a = temp.pop();
                             temp.push(a+b);
                             break;
                         case '-':
-                            a = temp.pop();
                             b = temp.pop();
+                            a = temp.pop();
                             if (b>a){
                                 val = false;
                             }else{
@@ -224,13 +223,13 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
                             }
                             break;
                         case '*':
-                            a = temp.pop();
                             b = temp.pop();
+                            a = temp.pop();
                             temp.push(a*b);
                             break;
                         case '/':
-                            a = temp.pop();
                             b = temp.pop();
+                            a = temp.pop();
                             if (b==0){
                                 val = false;
                             }else{
@@ -246,9 +245,15 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
             }
             
         }
+        if (temp.get_size()==1){
+            res.push(temp.peek());
+        }else{
+            vals--;
+        }
+        polac.pop();
 
     }
-    cout<<"La pila tiene "<<val<<" expresiones válidas de "<<tam<<", un "<<(val/tam)*100<<"%.";
+    cout<<"La pila tiene "<<vals<<" expresiones válidas de "<<tam<<", un "<<(vals/tam)*100<<"%."<<endl;
     return res;
 }
 
