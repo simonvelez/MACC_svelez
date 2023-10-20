@@ -216,11 +216,7 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
                         case '-':
                             b = temp.pop();
                             a = temp.pop();
-                            if (b>a){
-                                val = false;
-                            }else{
-                                temp.push(a-b); 
-                            }
+                            temp.push(a-b); 
                             break;
                         case '*':
                             b = temp.pop();
@@ -248,7 +244,7 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
         if (temp.get_size()==1){
             res.push(temp.peek());
         }else{
-            vals--; //Si ya se leyó toda la expresión y hay varios resultados, es porque esta es inválida.
+            vals--; // Si se leyó toda la expresión y siguen habiendo varios resultados, esta es inválida
         }
         polac.pop();
 
