@@ -248,7 +248,7 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
         if (temp.get_size()==1){
             res.push(temp.peek());
         }else{
-            vals--;
+            vals--; //Si ya se leyó toda la expresión y hay varios resultados, es porque esta es inválida.
         }
         polac.pop();
 
