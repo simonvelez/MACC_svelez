@@ -202,19 +202,40 @@ Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una p
                 polac.pop();
                 break;
             }
-            
+            int a = 0;
+            int b = 0;
             if (isdigit(expr[j])){
-                temp.push(expr[j]-'0');
+                temp.push(int(expr[j]-'0'));
             }else{
                 if (temp.get_size() > 1){
-                    switch(){
+                    switch(expr[j]){
                         case '+':
+                            a = temp.pop();
+                            b = temp.pop();
+                            temp.push(a+b);
                             break;
                         case '-':
+                            a = temp.pop();
+                            b = temp.pop();
+                            if (b>a){
+                                val = false;
+                            }else{
+                                temp.push(a-b); 
+                            }
                             break;
                         case '*':
+                            a = temp.pop();
+                            b = temp.pop();
+                            temp.push(a*b);
                             break;
                         case '/':
+                            a = temp.pop();
+                            b = temp.pop();
+                            if (b==0){
+                                val = false;
+                            }else{
+                                temp.push(a/b); 
+                            }                       
                             break;
                         default:
                             val = false; // Si el elem no es un número ni un signo, la expresión es inválida
