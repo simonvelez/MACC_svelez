@@ -7,6 +7,7 @@ Universidad del Rosario, 2023
 */
 
 #include<iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -183,26 +184,48 @@ public:
 };
 
 Pila<int> polacinv(Pila<string> polac){ //Retorna la pila de resultados de una pila en polaco inverso
-    Pila<int> res;
-    int tam =  polac.get_size(); //Expresiones totales
-    int val = tam; //Expresiones válidas
-    for (int i = 0; i < polac.get_size(); i++){
+    Pila<int> res; 
+    Pila<int> temp; //Pila para los cálculos de cada expresión
+    int tam =  polac.get_size();
+    int vals = tam; //Expresiones válidas
+    bool val = true;
+    string expr = polac.peek();
+    
+    while (not polac.isEmpty()){
+        val = true;
+        expr = polac.peek();
+        temp.clear();
         
-        switch(polac.peek()[2]){
-            case '+':
-                res.push(polac.peek()[0] + polac.peek()[1];
+        for (int j = 0; j< expr.size(); j++){ //Iterar sobre cada elemento de la expresión
+            if (val = false){
+                vals--;
                 polac.pop();
                 break;
-            case '-':
-                break;
-            case '*':
-                break;
-            case '/':
-                break;
-            default:
-                val--;
-                polac.pop();
+            }
+            
+            if (isdigit(expr[j])){
+                temp.push(expr[j]-'0');
+            }else{
+                if (temp.get_size() > 1){
+                    switch(){
+                        case '+':
+                            break;
+                        case '-':
+                            break;
+                        case '*':
+                            break;
+                        case '/':
+                            break;
+                        default:
+                            val = false; // Si el elem no es un número ni un signo, la expresión es inválida
+                    }
+                }else{
+                    val = false; // Si se quiere hacer una operación con menos de dos elementos, la expresión es inválida
+                }
+            }
+            
         }
+
     }
     cout<<"La pila tiene "<<val<<" expresiones válidas de "<<tam<<", un "<<(val/tam)*100<<"%.";
     return res;
