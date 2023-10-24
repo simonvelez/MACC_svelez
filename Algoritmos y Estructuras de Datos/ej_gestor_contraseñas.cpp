@@ -49,15 +49,17 @@ int main()
                 punt = true;
             }
         }
-        if (may and min and num and punt){
+        if (may and min and num and punt and contra.length() > 3){
             m[usua] = contra;
         }else{
-            cout<<"La contraseña debe incluir por lo menos una mayúscula, una mínuscula, un carácter especial y un número.";
+            cout<<"La contraseña debe incluir por lo menos una mayúscula, una mínuscula, un carácter especial, un número y 4 caracteres.";
         }
       print(m);
       cout<<endl<<"- - - - - - - - - - - - - - - - - - -"<<endl;
       cout<<"¿Agregar un usuario nuevo? (Y: sí, N: no)"<<endl;
       cin>>temp;
     }
+    cout<<"Usuarios y contraseñas finales: "<<endl;
+    print(m);
     return 0;
 }
