@@ -27,14 +27,22 @@ class HashMapTable {
     int hashFunction (string key){
         int resultado = 0;
         for (int i = 0; i < key.length(); i++){
-            resultado = resultado*10 + (key[i]-60)*i;
+            resultado = resultado*i + key[i];
         }
         return resultado % table_size;
     }
     // insert function to push the keys in hash table
     void insertElement (string key) {
         int index = hashFunction (key);
-        table[index].push_back (key);
+        while (not(table[index].empty())){
+            if (index < table_size+1){
+                index++;
+            }else{
+                index = 0;
+            }
+        }
+        table[index].push_back(key);
+        
     }
  
     // delete function to delete the element from the hash table
