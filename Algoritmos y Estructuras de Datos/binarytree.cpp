@@ -36,12 +36,6 @@ void insertar(Nodo*& arbol,int n){
     }
 }
 
-void printSpaces(int n) {
-    for (int i = 0; i < n; ++i) {
-        cout << "  ";
-    }
-}
-
 void treeprint(Nodo* arbol, int nivel = 0) {
     if (arbol != NULL) {
         nivel += 1;
