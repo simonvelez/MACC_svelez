@@ -36,9 +36,24 @@ void insertar(Nodo*& arbol,int n){
     }
 }
 
-void treeprint(){
-    
+void printSpaces(int n) {
+    for (int i = 0; i < n; ++i) {
+        cout << "  ";
+    }
 }
+
+void treeprint(Nodo* arbol, int nivel = 0) {
+    if (arbol != NULL) {
+        nivel += 1;
+        treeprint(arbol->der, nivel);
+        for (int i = 0; i < 2*nivel; ++i) {
+            cout << "  ";
+        }
+        cout << arbol->dato << endl;
+        treeprint(arbol->izq, nivel);
+    }
+}
+
 void treebuscar(Nodo*& arbol, int valor){
     if (arbol == NULL){
         cout <<"no existe el dato";
@@ -64,7 +79,7 @@ int main()
     insertar(arbolito, 10);
     insertar(arbolito, 9);
     insertar(arbolito, 11);
-    treebuscar(arbolito, 0);
+    treeprint(arbolito);
     
 
     return 0;
