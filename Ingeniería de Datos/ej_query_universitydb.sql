@@ -1,6 +1,6 @@
 /*
 	Ejercicios de query en UniversityDB
-	19 feb 2024
+	26 feb 2024
 */
 
 
@@ -38,3 +38,38 @@ where salary > (select min(salary) from instructor where dept_name = 'Comp. Sci.
 select name from instructor
 where salary > some (select salary -- Mejor y más corto usando some
 from instructor where dept_name = 'Comp. Sci.');
+
+-- 26/02/24
+
+-- Encontrar los cursos de Biology y Comp. Sci. usando subconsultas
+select * from course
+where dept_name = 'Comp. Sci.'
+or course_id in
+(select course_id from course where dept_name = 'Biology');
+
+-- Encontrar la suma de los créditos de los dptos de Biology y Comp. Sci.
+
+select dept_name, sum(credits) from course
+where dept_name = 'Comp. Sci.'
+or course_id in
+(select course_id from course where dept_name = 'Biology')
+group by dept_name;
+
+-- Consulta usando el comando in que traiga la suma de todos los créditos del dpto de Comp. Sci. menos los del curso de Image Processnig
+
+select sum(credits) from course
+where dept_name = 'Comp. Sci.'
+and course_id not in
+(select course_id from course where title = 'Image Processing');
+
+-- Nombre de los estudiantes que hayan tomado el curso Intro. to Computer Science
+
+select name from student where id in
+(select id from takes where course_id in 
+(select course_id from course where title = 'Intro. to Computer Science'));
+
+-- encontrar el departamento con el mayor presupuesto
+
+with max_budget(value) as (select max(budget) from department)
+select dept_name, budget from department, max_budget
+where department.budget = max_budget.value;
