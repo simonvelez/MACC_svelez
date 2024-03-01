@@ -73,3 +73,87 @@ select name from student where id in
 with max_budget(value) as (select max(budget) from department)
 select dept_name, budget from department, max_budget
 where department.budget = max_budget.value;
+
+-- 1/03/23 
+
+-- Vistas
+create view instructores as 
+(
+	select name, dept_name from instructor
+);
+
+select * from instructores;
+
+create table cuenta(
+	numero varchar(3),
+	cliente varchar(20),
+	saldo numeric(10,2)
+);
+
+insert into cuenta
+values
+('AAA','Javier', 100000),
+('BBB','Pedro', 60000);
+
+select * from cuenta;
+
+-- Sirve para hacer varios comandos a la vez
+begin;
+update cuenta set saldo = saldo - 20000
+where numero = 'AAA';
+update cuenta set saldo = saldo + 20000
+where numero = 'BBB';
+commit;
+end;
+
+-- Se pueden crear nuevos constraints
+alter table student add
+constraint nombre_unico unique(name);
+
+select * from student;
+
+insert into student values -- Falla por la nueva restricción
+(25879, 'Chavez', 'Comp. Sci.', 20);
+
+alter table section add
+constraint value_semester
+check (semester in ('Fall', 'Spring', 'Summer', 'Winter'));
+
+insert into section values
+('BIO-101', 2, 'spring', 2015, 'Watson', 120, 'D'); -- Falla por la nueva restricción
+
+/*
+	Ejercicios
+*/
+
+-- 1. Encontrar los títulos de los cursos que pertenezcan al depto con presupuesto de $100.000 y que tengan tres créditos (a. usando subconsultas. b. usando join)
+-- a: Con subconsultas
+select title from course where credits = 3 and dept_name in(
+select dept_name from department where budget = 100000);
+-- b: Con join
+select title from course, department 
+where course.dept_name = department.dept_name and credits = 3 and budget = 100000;
+
+-- 2. Encontrar los Ids y nombres de todos los estudiantes que recibieron clase con el profesor Einstein
+select name, id from student
+where id in (
+select id from takes where course_id in(
+select course_id from teaches where id in(
+select id from instructor where name = 'Einstein')));
+
+
+-- 3. Crear una vista con los resultados anteriores (Punto 2)
+create view einsteiniticos as 
+(
+	select name, id from student
+	where id in (
+	select id from takes where course_id in(
+	select course_id from teaches where id in(
+	select id from instructor where name = 'Einstein')))
+);
+
+-- 4. Insertar los estudiantes que tengan más de 100 créditos a la relación instructor con el mismo departamento y con un salario de 10000
+insert into instructor (id, name, dept_name, salary)
+(select id, name, dept_name, 10000 as salary from student where tot_cred > 100);
+delete from instructor where salary = 10000;
+
