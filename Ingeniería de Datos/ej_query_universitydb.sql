@@ -157,3 +157,64 @@ insert into instructor (id, name, dept_name, salary)
 (select id, name, dept_name, 10000 as salary from student where tot_cred > 100);
 delete from instructor where salary = 10000;
 
+
+-- 6/03/24
+-- set default
+alter table student
+alter column tot_cred
+set default 0;
+
+insert into student(id, name, dept_name) values
+(365, 'Javier C', 'Comp. Sci.');
+
+-- Creación de variables
+create type moneda as (pesos int, centavos int);
+
+create table prueba_moneda(
+	id int,
+	valor moneda
+);
+
+insert into prueba_moneda values(1, row(25,36));
+
+create type persona as (nombre varchar(20));
+alter table prueba_moneda add column nombre persona;
+update prueba_moneda set nombre = ROW('Javier') where id = 1;
+
+-- Dominios de datos
+create domain Dmoneda as numeric(12,2) not null;
+
+create table dominio (
+	id integer,
+	valor Dmoneda
+);
+
+insert into dominio values (1,25.895);
+
+create type nombrecompleto as(
+	nombre varchar(20),
+	apellido varchar(20)
+);
+
+alter table prueba_moneda add column nombrecompleto nombrecompleto;
+insert into prueba_moneda values (2, row(25,36), row('Pedro'), row('Pedro','Martinez'));
+
+/*
+Ejercicio 1
+
+Visualizar la lista de todas las secciones de curso ofrecidos en Spring 2010, junto con los nombres de los instructores que
+enseñaron dicha sección. Si la sección tiene más de un instructor, este debería aparecer tantas veces en el resultado como
+instructor. Si no tiene instructor, esta debería aparece como nombre de instructor "_____". Requerimiento: Usar join
+*/
+
+select subteaches.id, subteaches.sec_id, I.name from
+(select S.sec_id, T.id from section as S
+left outer join teaches as T on (
+	S.year = T.year
+	and S.semester = T.semester
+	and S.sec_id = T.sec_id
+	and S.course_id = T.course_id)
+where S.semester = 'Spring' and S.year = 2010) as subteaches
+left join instructor as I on subteaches.id = I.id;
+
+
