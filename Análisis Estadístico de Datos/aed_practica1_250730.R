@@ -1,4 +1,5 @@
-# AED - Práctica 1
+# AED - Práctica 1 Julio 30 2025
+# Análisis descriptivo
 
 library(Epi)
 library(dplyr)
