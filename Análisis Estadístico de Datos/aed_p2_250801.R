@@ -127,3 +127,41 @@ plot_ly(data=datos,
                hovermode = "closest")
 
 
+## Distancias
+
+# Distancia de Mahalanobis
+
+A = c(180,80)
+B = c(170,72)
+C = c(165,81)
+
+# Con desvesta de 10cm y 10 kg y el coeficiente de correlación de 0.7,
+S = c(10,10) # desvesta
+r = 0.7
+
+d.mahalanobis = (1/(1-r^2))*(((A[1]-B[1])^2/S[1]^2 + (A[2]-B[2])^2/S[2]^2)
+                - 2*r*(((A[1]-B[1])*(A[2]-B[2])))/(S[1]*S[2]))
+d.mahalanobis
+
+# Distancia usando base de datos
+
+library(readxl)
+ejemplo1 <- read_excel("Documents/GitHub/MACC_svelez/Análisis Estadístico de Datos/bases_datos/ejemplo1.xlsx", 
+                       col_types = c("numeric", "numeric", "numeric", "numeric"))
+
+vector.medias = colMeans(ejemplo1)
+vector.medias
+
+S = cov(ejemplo1)
+S
+
+# Distancia Mahalanobis
+DM = mahalanobis(ejemplo1, vector.medias, S); DM
+
+# Distancia euclidiana
+matriz.identidad = diag(1,ncol(ejemplo1))
+matriz.identidad
+
+DE = mahalanobis(ejemplo1, vector.medias, matriz.identidad); DE
+
+cbind(DM, DE)
