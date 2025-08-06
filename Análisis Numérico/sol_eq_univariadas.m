@@ -1,0 +1,46 @@
+% - - - - - - - - - - - - - - -
+% Metodo de Biseccion 250805  
+% Simon Velez                 
+% Analisis Numerico           
+% 2025 08 05
+% - - - - - - - - - - - - - -
+
+A = 1;
+B = 2;
+Er = 0.02; %10^-5; % error relativo objetivo
+
+
+function f = f(x) % funcion 
+    f(x) = x^3+4.*x^2-10;
+end
+
+function err = err(a,b)
+    err(a,b) = ((a-b)/b) .* 100;
+end
+
+oldC = 1;
+temp = 100;
+while temp > Er 
+    C = (A + B) / 2;
+    fA = f(A);
+    fB = f(B);
+    fC = f(C);
+    
+    if fA .* fC < 0
+        newA = A;
+        newB = C;
+
+        temp = err(C, oldC);
+
+        oldC = C;
+    elseif fB .* fC < 0
+        newA = C;
+        newB = B;
+
+        temp = err(C, oldC);
+
+        oldC = C;
+    else
+        disp("Hola")
+    end
+end
