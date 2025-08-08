@@ -27,17 +27,20 @@ while temp > Er
     fC = f(C);
     
     if fA * fC < 0
-        B = C;
+        newA = A;
+        newB = C;
+
+        temp = err(C, oldC);
+
+        oldC = C;
     elseif fB * fC < 0
-        A = C;
+        newA = C;
+        newB = B;
+
+        temp = err(C, oldC);
+
+        oldC = C;
     else
         disp("Raiz exacta o error")
-        break;
     end
-
-    temp = err(C, oldC);
-    oldC = C;
-
 end
-
-fprintf("Raiz en x = %.10f con error relativo = %.10f\n%%", C, temp)
