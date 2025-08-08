@@ -41,3 +41,6 @@ while temp > Er
 end
 
 fprintf("Raiz en x = %.10f con error relativo = %.10f\n%%", C, temp)
+
+
+
