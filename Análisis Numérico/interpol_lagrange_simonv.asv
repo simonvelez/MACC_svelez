@@ -1,0 +1,40 @@
+%% - - - - - - - - - - - - - - -
+% Interpolación lineal - Polinomios de Lagrange
+% Simón Vélez                 
+% Análisis Numérico           
+% 2025 08 25
+% - - - - - - - - - - - - - -
+
+function P = lagrange(x, y) % función que computa la interpol. de lagrange
+% x, y vectores de los datos
+
+    syms x_var; % vuelve nuestro némesis syms, para poder tomar el polinomio
+    n = length(x); 
+    P = 0; % inicializa P_N(x)
+
+    % P_N(x) = sum_{k=0 to N} y_k * L_N,k(x)
+    for k = 1:n
+        
+        % L_N,k(x) = producto_{j=0 to N, j~=k} (x - x_j) / (x_k - x_j)
+        L_k = 1;
+        for j = 1:n
+            if j ~= k % no igual (no recordaba que así se hacía en matlab)
+                L_k = L_k * (x_var - x(j)) / (x(k) - x(j));
+            end
+        end
+        
+        P = P + y(k) * L_k;
+    end
+end
+s
+x = [1.6,2,2.5,3.2,4,4.5]; % puntos x_i
+y = [2,8,14,15,8,2]; % puntos f(x_i)
+eval = 2; % valor a evaluar el polinomio
+
+func = lagrange(x, y);
+y_eval = subs(func, x_var, eval);
+
+fprintf('El polinomio de lagrange es:\n');
+disp(expand(func)); % forma expandida porque por defecto sale factorizado
+
+fprintf('El valor interpolado en x = %.2f es y = %.4f\n', eval, y_eval);
