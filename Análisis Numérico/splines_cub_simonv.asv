@@ -1,0 +1,100 @@
+%% - - - - - - - - - - - - - - -
+% Interpolación por Splines Cúbicos
+% Simón Vélez                 
+% Análisis Numérico           
+% 2025 08 25
+% - - - - - - - - - - - - - -
+
+function [coef, x_puntos] = splinear(x, y) % calcular los coeficientes del spline :3
+
+    n = length(x) - 1; % Número de intervalos (que es # puntos -1)
+    x_puntos = x(:); % vector columna momento
+    coef = zeros(n, 4); % coeficientes
+
+    %% ALGORITHM STEPS 4, 5, 6: Solve for the Second Derivatives (M)
+    % This part builds and solves the tridiagonal system Ax=b for the
+    % unknown second derivatives M_1, ..., M_{n-1}.
+
+    h = diff(x); % Interval widths
+
+    % Construct the main diagonal of the matrix A
+    main_diag = 2 * (h(1:n-1) + h(2:n));
+    
+    % Construct the off-diagonals of A
+    off_diag = h(2:n-1);
+    
+    % Construct the tridiagonal matrix A
+    A = diag(main_diag) + diag(off_diag, 1) + diag(off_diag, -1);
+
+    % Construct the vector b
+    b = (6 ./ h(2:n)) .* (y(3:n+1) - y(2:n)) - ...
+        (6 ./ h(1:n-1)) .* (y(2:n) - y(1:n-1));
+
+    % Solve for the interior second derivatives
+    M_interior = A \ b(:);
+
+    % Apply natural boundary conditions (Step 6)
+    M = [0; M_interior; 0];
+
+    %% ALGORITHM STEPS 1, 2, 5: Compute Coefficients for each S_j(x)
+    % Using the formulas derived from the algorithm's conditions.
+    for j = 1:n
+        % a_j = y_j
+        coef(j, 1) = y(j);
+        
+        % b_j = (y_{j+1}-y_j)/h_j - h_j/6*(2*M_j + M_{j+1})
+        coef(j, 2) = (y(j+1) - y(j)) / h(j) - (h(j)/6) * (2*M(j) + M(j+1));
+
+        % c_j = M_j / 2
+        coef(j, 3) = M(j) / 2;
+
+        % d_j = (M_{j+1} - M_j) / (6*h_j)
+        coef(j, 4) = (M(j+1) - M(j)) / (6 * h(j));
+    end
+end
+
+function y_eval = evalSpline(coeffs, x_knots, x_eval)
+% evaluateSpline: Evaluates the cubic spline at specified points.
+    
+    n = size(coeffs, 1);
+    y_eval = zeros(size(x_eval));
+
+    for i = 1:length(x_eval)
+        x_val = x_eval(i);
+
+        % Find which interval the point x_val falls into
+        % The 'find' command returns the index of the last knot <= x_val
+        j = find(x_val >= x_knots, 1, 'last');
+        
+        % Handle edge case where x_val is exactly the last knot
+        if j == n + 1
+            j = n;
+        end
+
+        % Get coefficients for this interval
+        a = coeffs(j, 1);
+        b = coeffs(j, 2);
+        c = coeffs(j, 3);
+        d = coeffs(j, 4);
+
+        % Evaluate the polynomial S_j(x)
+        dx = x_val - x_knots(j);
+        y_eval(i) = a + b*dx + c*dx^2 + d*dx^3;
+    end
+end
+
+% Puntos del polinomios
+x_datos = [1.6, 2, 2.5, 3.2, 4, 4.5]; 
+y_datos = [2, 8, 14, 15, 8, 2];
+
+
+[coeffs, x_puntos] = splinear(x_datos, y_datos);
+
+fprintf('Coeficientes calculados (a, b, c, d) para cada intervalo:\n');
+disp(coeffs);
+
+% 3. Evaluate the spline at a specific point
+x_eval = 3;
+y_punto = evalSpline(coeffs, x_puntos, x_eval);
+fprintf('\nValor interpolado en x = %.2f es y = %.4f\n', x_eval, y_punto);
+
