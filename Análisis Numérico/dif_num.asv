@@ -9,15 +9,11 @@
 
 X = [1.8, 1.9, 2.0, 2.1, 2.2];
 fX = [10.889365, 12.703199, 14.778112, 17.148957, 19.855030];
-h = 0.1;
 
 %% Tres puntos por extremos
 
-function y = dTresEx(X, fX, h)
-    
-end
+d_tres_ex
 
-dTresEx(X, fX)
 
 %% Tres puntos por medios
 
