@@ -13,8 +13,14 @@ h = 0.1;
 
 %% Tres puntos por extremos
 
-function y = dTresEx(X, fX, h)
+function y = dTresEx(X, fX, x0, h)
+    if length(X) < 3
+        fprintf("Inserte mas datos :(")
+    end
     
+    % Definir donde esta x0
+    i = (x0 - i)/(X);
+
 end
 
 dTresEx(X, fX)
