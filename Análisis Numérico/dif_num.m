@@ -37,8 +37,8 @@ function  fprime_x0 = dTresMed(X, fX, x0, h)
     end
     
     x_step = X(2) - X(1);
-    i_0 = int8((x0 - X(1))/(x_step) + 1); % Definir donde esta x0
-    i = int8(h/x_step); % los pasos que hay que dar en la funcion segun el h
+    i_0 = round((x0 - X(1))/(x_step) + 1); % Definir donde esta x0
+    i = round(h/x_step); % los pasos que hay que dar en la funcion segun el h
     
     fprime_x0 = (1/(2*h))*(fX(i_0 + i) - fX(i_0 - i));
 end
@@ -102,3 +102,35 @@ fprintf("Con h = %.2f, f''(%.2f) = %.10f\n",...
 
 %% Extrapolación de Richardson 
 
+function R = richardson(X, fX, x0, h, m)
+    R = zeros(m,m);
+    
+    % Primera columna: aproximaciones base con pasos h, h/2, h/4, ...
+    for k = 1:m
+        R(k,1) = dTresMed(X, fX, x0, h/2^(k-1));
+    end
+    
+    % Tabla con los resultados
+    for j = 2:m
+        for k = j:m
+            R(k,j) = R(k,j-1) + (R(k,j-1) - R(k-1,j-1))/(4^(j-1)-1);
+        end
+    end
+end
+
+% Ejemplo del taller 2
+
+f = @(x) cos(x);
+
+X = 0:0.01:2.0;  
+fX = f(X);
+x0 = pi/4;
+h1 = pi/3;
+% h2 = pi/6; % (está implícito en la función)
+
+% Richardson 
+R = richardson(X, fX, x0, h1, 2);
+
+fprintf("N1(h=pi/3)   = %.6f\n", R(1,1));
+fprintf("N1(h/2=pi/6)= %.6f\n", R(2,1));
+fprintf('N2 (Richardson)= %.15f\n', R(2,2));
