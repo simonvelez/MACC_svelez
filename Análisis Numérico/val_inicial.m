@@ -18,6 +18,26 @@ b = 100;    % tiempo final
 paso = 0.001;
 N = (b-a)/paso; % numero de pasos
 
+%% Valores sistema de ecuaciones (ej)
+
+f = @(x, y) [ -0.5 * y(1); 
+               4 - 0.3 * y(2) - 0.1 * y(1) ];
+
+a = 0;              % Start of interval
+b = 2;              % End of interval
+y0 = [4; 6];        % [y1(0); y2(0)]
+h = 0.5;            
+N = (b - a) / h;    
+
+[x, y] = metPMedio_sist(f, a, b, y0, N);
+
+
+results_table = [x; y]';
+
+fprintf('   x      y1         y2\n');
+fprintf('-----------------------------\n');
+disp(results_table);
+
 %% Método de Euler
 
 function [t, y] = metEuler(f, a, b, y0, N)
@@ -86,8 +106,6 @@ empty_index = find(y <= 0, 1); % Encontrar el indice donde la ec llega a 0
 
 fprintf("Res: %.10f\n", t(empty_index))
 
-%% Método de EU
-
 
 %% RK4
 
@@ -118,7 +136,7 @@ fprintf("Res: %.10f\n", t(empty_index))
 
 %% Runge Kutta Fehlberg
 
-function [t, y] = RKF(f, a, b, y0, TOL, h_init, h_min, h_max) % TOL: tolerancia al error
+function [t, y] = RKF(f, a, b, y0, TOL, h_init, h_min, h_max) % TOL: tolerancia al error (epsilon)
     
     t(1) = a;
     y(1) = y0;
@@ -160,7 +178,7 @@ end
 TOL = 1e-5;
 h_init = 0.2;  
 h_min = 0.01;   
-h_max = 0.5;    
+h_max = 0.25;    
 
 empty_index = find(y <= 0, 1); % Encontrar el indice donde la ec llega a 0
 
@@ -175,3 +193,94 @@ grid on;
 legend('RKF')
 
 %% Sistemas de ecuaciones
+
+% Euler
+
+function [t, y] = metEuler_sist(f, a, b, y0, N)
+    
+    h = (b - a) / N;
+    t = a:h:b;
+    
+    % Asegurar que y0 sea un vector columna
+    if size(y0, 2) > 1
+        y0 = y0';
+    end
+    
+    num_eqs = length(y0);
+    y = zeros(num_eqs, N + 1);    
+    y(:, 1) = y0; 
+    
+    for i = 1:N
+        y(:, i+1) = y(:, i) + h * f(t(i), y(:, i));
+    end
+end
+
+% Punto Medio
+
+function [t, y] = metPMedio_sist(f, a, b, y0, N)
+    % Calcula la solución de un sistema de EDOs y' = f(t,y)
+    % usando el método del Punto Medio.
+    
+    h = (b - a) / N;
+    t = a:h:b;
+    
+    % Asegurar que y0 sea un vector columna
+    if size(y0, 2) > 1
+        y0 = y0';
+    end
+    
+    num_eqs = length(y0);
+    y = zeros(num_eqs, N + 1);    
+    y(:, 1) = y0;
+    
+    for i = 1:N % dividi en k1 y k2 para que y no quede tan largo
+        k1 = f(t(i), y(:, i));
+        k2 = f(t(i) + h/2, y(:, i) + (h/2) * k1);
+        y(:, i+1) = y(:, i) + h * k2;
+    end
+end
+
+% Euler Modificado
+
+function [t, y] = metEulerMod_sist(f, a, b, y0, N)
+    
+    h = (b - a) / N;
+    t = a:h:b;
+    
+    if size(y0, 2) > 1
+        y0 = y0';
+    end
+    
+    num_eqs = length(y0);
+    y = zeros(num_eqs, N + 1);    
+    y(:, 1) = y0; 
+   
+    for i = 1:N
+        y(:, i+1) = y(:, i) + (h/2) * (f(t(i), y(:, i)) + f(t(i+1), y(:, i) + h * f(t(i), y(:, i))));
+    end
+end
+
+% RK4 
+
+function [t, y] = RK4_sist(f, a, b, y0, N) % y_0 vector columna
+
+    h = (b - a) / N;
+    t = a:h:b;
+    
+    if size(y0, 2) > 1
+        y0 = y0';
+    end
+    
+    num_eqs = length(y0);
+    y = zeros(num_eqs, N + 1);    
+    y(:, 1) = y0; 
+    
+    for i = 1:N
+        k1 = h * f(t(i), y(:, i));
+        k2 = h * f(t(i) + h/2, y(:, i) + k1/2);
+        k3 = h * f(t(i) + h/2, y(:, i) + k2/2);
+        k4 = h * f(t(i) + h, y(:, i) + k3);
+        
+        y(:, i+1) = y(:, i) + (1/6) * (k1 + 2*k2 + 2*k3 + k4);
+    end
+end
