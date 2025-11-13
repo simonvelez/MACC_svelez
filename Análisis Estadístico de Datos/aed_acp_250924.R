@@ -76,6 +76,21 @@ library(factoextra)
 res.pca=PCA(USArrests,graph=FALSE)
 print(res.pca)
 
+#Visualización e interpretación
+
+#valores propios; valores mayores a 1
+eig.val=get_eigenvalue(res.pca)# Permite extraer los valores 
+#propios o las varianzas de los componentes principales.
+eig.val
+
+sum(eig.val[,1])#da el número de variables
+
+# Si queremos una varianza acumulada mayor al 80%, tomamos dos componentes.
+# Si 
+
+#gráfica
+# fviz_eig Facilita la visualización de los valores propios.
+fviz_eig(res.pca,  addlabels  =  TRUE,  ylim  =  c(0,  50)) 
 
 
 
